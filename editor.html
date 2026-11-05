@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#091122">
+  <meta name="robots" content="noindex, nofollow">
+  <title>記事作成ツール | ゲーム改造研究所</title>
+  <style>
+    :root{color-scheme:dark;--bg:#091122;--panel:#121e35;--panel2:#192741;--line:#304264;--muted:#a3b3cb;--text:#f4f8ff;--mint:#71f2d6;--blue:#82a6ff;--red:#ff9caa;--shadow:0 16px 42px #0005}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse 700px 450px at 80% -5%,#234c7544,transparent 75%),var(--bg);font:15px/1.6 system-ui,-apple-system,'Noto Sans JP',sans-serif;color:var(--text)}
+    button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:var(--mint)}
+    .wrap{width:min(1120px,calc(100% - 30px));margin:0 auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 0 10px}.brand{display:flex;align-items:center;gap:10px;font-weight:850}.glyph{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;background:linear-gradient(135deg,#6af1cf,#6996ff);color:#07152c;font-size:20px}.top a{font-size:13px;text-decoration:none}
+    .hero{padding:28px 0 22px}.eyebrow{font-size:12px;color:var(--mint);font-weight:800;letter-spacing:.1em}.hero h1{font-size:clamp(27px,5vw,40px);line-height:1.25;margin:9px 0 14px}.hero p{color:var(--muted);margin:0;max-width:780px}.notice{background:#14333b;border:1px solid #326568;border-radius:13px;padding:12px 15px;color:#c9f3e9;margin:10px 0 18px}.notice.warn{background:#362a20;border-color:#6f5538;color:#ffe0b6}.hidden{display:none!important}
+    .layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;align-items:start;margin-bottom:25px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}.pad{padding:18px}.panelhead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}.panelhead h2{font-size:17px;margin:0}.badge{font-size:12px;color:var(--mint);border:1px solid #376d77;background:#0c323c;padding:4px 8px;border-radius:99px}.muted{font-size:13px;color:var(--muted)}.articles{max-height:670px;overflow:auto}.article{display:block;text-align:left;width:100%;background:transparent;border:0;border-bottom:1px solid #263857;color:var(--text);padding:14px 18px}.article:hover,.article.selected{background:#1e3150}.article.selected{border-left:4px solid var(--mint);padding-left:14px}.article .label{font-size:12px;color:var(--mint)}.article strong{display:block;margin-top:4px;line-height:1.4}.article small{color:var(--muted)}
+    .button{border:1px solid #51668a;background:#233455;color:white;border-radius:10px;padding:11px 14px;font-weight:750}.button.primary{border-color:transparent;background:linear-gradient(120deg,#66eecf,#739bff);color:#061627}.button.ghost{background:transparent}.button.danger{border-color:#a65c6e;color:#ffc5cb;background:transparent}.button:disabled{opacity:.45;cursor:not-allowed}.button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--mint);outline-offset:2px}.toolbar{display:flex;flex-wrap:wrap;gap:9px}.full{width:100%}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:15px;min-width:0}.field label{font-weight:700;font-size:13px}.field input,.field select,.field textarea{width:100%;background:#0b1427;color:white;border:1px solid #3e5072;border-radius:10px;padding:11px 12px;min-height:43px}.field textarea{resize:vertical;min-height:95px}.field .hint{font-size:12px;color:var(--muted)}.section{border:1px solid #334766;border-radius:12px;background:#101b30;padding:13px;margin-bottom:12px}.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:800;margin-bottom:12px}.mini{padding:5px 8px;font-size:12px;border:1px solid #80566d;border-radius:8px;color:#ffbbcc;background:transparent}
+    .foot{margin:20px 0 40px}.steps{margin:9px 0 0;padding-left:22px;color:var(--muted)}.steps li{padding-bottom:5px}code{background:#24334d;padding:1px 5px;border-radius:4px;color:#d7f4ff;overflow-wrap:anywhere}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#daf9ee;color:#143329;padding:10px 16px;border-radius:12px;font-size:14px;box-shadow:0 8px 30px #0008;z-index:10;max-width:90vw}.empty{padding:16px;color:var(--muted)}.divider{border-top:1px solid var(--line);margin:17px 0}
+    @media(max-width:740px){.layout{grid-template-columns:1fr}.articles{max-height:260px}.panelhead{padding:13px 15px}.pad{padding:15px}.formGrid{grid-template-columns:1fr}.top a{font-size:12px}.hero{padding:18px 0}.hero h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><div class="brand"><span class="glyph">G</span><span>ゲーム改造研究所<br><span class="muted">記事作成ツール</span></span></div><a href="./index.html">← サイトに戻る</a></header>
+  <div class="hero"><div class="eyebrow">GAME MODDING ARCHIVE · EDITOR</div><h1>ゲームの記事を、スマホから編集。</h1><p>作品を選んで入力するだけで、サイト用の <code>posts.js</code> を作れるよ。パスワード不要だけど、このページの編集内容はその場では公開されません。</p></div>
+  <div class="notice" id="info">✅ 編集内容はこのブラウザーに仮保存されるよ。公開するには、最後にGitHubの <code>posts.js</code> を更新してね。</div>
+  <div class="notice warn hidden" id="loadWarning">⚠️ 元の記事データ <code>posts.js</code> を読み込めなかったよ。既存の記事を消さないため、編集は停止中。<code>editor.html</code> をサイトのルートに置いて開いてね。</div>
+  <div class="layout">
+    <aside class="panel">
+      <div class="panelhead"><h2>📚 記事一覧</h2><span class="badge" id="count">0件</span></div>
+      <div class="pad"><button class="button primary full" id="newButton">＋ 新しい記事を作る</button></div>
+      <div class="articles" id="articles"></div>
+      <div class="pad"><div class="toolbar"><button class="button ghost" id="restoreButton">↩ 初期データに戻す</button></div><p class="muted">下書きのデータはこの端末だけに保存されます。</p></div>
+    </aside>
+    <main class="panel">
+      <div class="panelhead"><h2 id="formTitle">記事を編集</h2><span class="badge" id="draftBadge">未編集</span></div>
+      <div class="pad">
+        <div class="formGrid"><div class="field"><label for="platform">ゲーム機</label><select id="platform"><option>DS</option><option>3DS</option><option>PSP</option><option>PS2</option></select></div><div class="field"><label for="status">公開状態</label><select id="status"><option>準備中</option><option>公開中</option></select></div></div>
+        <div class="field"><label for="title">ゲーム・記事の名前 *</label><input id="title" maxlength="140" placeholder="例：イナズマイレブン1　検証記録"></div>
+        <div class="field"><label for="summary">一覧に表示する短い説明</label><textarea id="summary" rows="3" maxlength="800" placeholder="どんな検証かを短く説明しよう"></textarea></div>
+        <div class="field"><label for="tags">検索用のタグ（カンマ区切り）</label><input id="tags" placeholder="イナイレ, チート, DS"><div class="hint">タグを付けるとサイトの検索で見つかりやすくなるよ。</div></div>
+        <div class="divider"></div>
+        <div class="sectionHead">📝 記事の本文</div><div id="sections"></div><div class="toolbar"><button class="button ghost" id="addSection">＋ 見出しを増やす</button></div>
+        <div class="divider"></div>
+        <div class="toolbar"><button class="button primary" id="saveButton">💾 記事を仮保存</button><button class="button danger" id="deleteButton">この記事を削除</button></div>
+        <div class="divider"></div>
+        <h2 style="font-size:17px;margin:0 0 10px">📤 公開用ファイルを書き出す</h2>
+        <p class="muted">仮保存した記事をまとめて、GitHubで更新するためのファイルにするよ。書き出す前に記事を仮保存してね。</p>
+        <div class="toolbar"><button class="button primary" id="copyButton">📋 コードをコピー</button><button class="button" id="downloadButton">⬇ posts.js を保存</button></div>
+        <p class="muted" id="exportStatus" role="status"></p>
+      </div>
+    </main>
+  </div>
+  <section class="panel foot"><div class="panelhead"><h2>🌍 世界中の人に公開する手順</h2></div><div class="pad"><ol class="steps"><li>記事を入力して「記事を仮保存」を押す。</li><li>「コードをコピー」を押す。</li><li>下のリンクでGitHubの <code>posts.js</code> を編集する。</li><li>GitHubのコードを全部選択して消し、コピーしたコードを貼り付ける。</li><li><b>Commit changes</b>（変更を保存）を押す。サイトに反映されるよ。</li></ol><p><a href="https://github.com/reo01026145-lab/game-mod-site/edit/main/posts.js" target="_blank" rel="noopener noreferrer">GitHubで posts.js を編集する ↗</a></p><p class="muted">この編集ツールを開くだけでは、GitHubのファイルは変わらないよ。GitHubの更新権限を持つ人だけが公開できる仕組み。</p></div></section>
+</div>
+<div class="toast hidden" id="toast" role="status"></div>
+<script src="./posts.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const remote = Array.isArray(window.GAME_POSTS) ? window.GAME_POSTS : null;
+  const storeKey = 'game-mod-archive-editor-v1';
+  let posts = remote ? JSON.parse(JSON.stringify(remote)) : [];
+  let selected = null, sections = [];
+  let edited = false;
+  const canLoad = !!remote;
+  const buttons = ['newButton','restoreButton','saveButton','deleteButton','addSection','copyButton','downloadButton'];
+  if(!canLoad){ $('loadWarning').classList.remove('hidden'); buttons.forEach(id=>$(id).disabled=true); $('articles').innerHTML='<div class="empty">元の記事データを読み込めませんでした。</div>'; return; }
+  function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2600);}
+  function note(s){$('exportStatus').textContent=s;}
+  function escapeText(s){return String(s||'');}
+  function renderList(){
+    $('count').textContent=posts.length+'件';
+    $('articles').replaceChildren();
+    posts.forEach(p=>{
+      const b=document.createElement('button'); b.type='button';b.className='article'+(p.id===selected?' selected':'');
+      const label=document.createElement('div');label.className='label';label.textContent=p.platform+' / '+p.status;
+      const t=document.createElement('strong');t.textContent=p.title||'（タイトルなし）';
+      const small=document.createElement('small');small.textContent=(p.summary||'説明なし').slice(0,50);
+      b.append(label,t,small); b.addEventListener('click',()=>pick(p.id));$('articles').appendChild(b);
+    });
+  }
+  function sectionRow(s,idx){
+    const div=document.createElement('div');div.className='section';
+    const row=document.createElement('div');row.className='sectionHead';
+    const cap=document.createElement('span');cap.textContent='見出し '+(idx+1);
+    const remove=document.createElement('button');remove.className='mini';remove.textContent='削除';remove.type='button';remove.addEventListener('click',()=>{readSections();sections.splice(idx,1);paintSections();markEdited();});
+    row.append(cap,remove);
+    const a=document.createElement('div');a.className='field';const la=document.createElement('label');la.textContent='見出し';const ia=document.createElement('input');ia.className='secHeading';ia.value=s.heading||'';ia.placeholder='例：検証方法';a.append(la,ia);
+    const b=document.createElement('div');b.className='field';const lb=document.createElement('label');lb.textContent='本文';const ib=document.createElement('textarea');ib.className='secBody';ib.rows=6;ib.value=s.body||'';ib.placeholder='検証環境、手順、結果を書こう';b.append(lb,ib);
+    ia.addEventListener('input',markEdited);ib.addEventListener('input',markEdited);
+    div.append(row,a,b);return div;
+  }
+  function paintSections(){ $('sections').replaceChildren(...sections.map(sectionRow)); }
+  function readSections(){
+    const headings=Array.from(document.querySelectorAll('.secHeading'));
+    const bodies=Array.from(document.querySelectorAll('.secBody'));
+    sections=headings.map((a,i)=>({heading:a.value.trim(),body:bodies[i].value.trim()})).filter(x=>x.heading||x.body);
+  }
+  function markEdited(){edited=true;$('draftBadge').textContent='未保存';note('記事を変更したら「記事を仮保存」を押してね。');}
+  function pick(id){
+    if(edited && !confirm('入力中の変更はまだ仮保存されていないよ。別の記事を開く？')) return;
+    const p=posts.find(x=>x.id===id);if(!p)return;
+    selected=id;edited=false;$('formTitle').textContent='記事を編集';$('draftBadge').textContent='編集中';
+    $('platform').value=p.platform; $('status').value=p.status; $('title').value=p.title||''; $('summary').value=p.summary||''; $('tags').value=(p.tags||[]).join(', ');
+    sections=JSON.parse(JSON.stringify(p.sections||[]));paintSections();renderList();note('');
+  }
+  function startNew(){
+    if(edited && !confirm('入力中の変更はまだ仮保存されていないよ。新規作成する？'))return;
+    selected=null;edited=false;$('formTitle').textContent='新しい記事';$('draftBadge').textContent='新規';
+    $('platform').value='DS';$('status').value='準備中';$('title').value='';$('summary').value='';$('tags').value='';
+    sections=[{heading:'検証内容',body:''}];paintSections();renderList();note('');
+    $('title').focus();
+  }
+  function remember(){try{localStorage.setItem(storeKey,JSON.stringify(posts));return true;}catch(e){toast('端末への保存に失敗したよ');return false;}}
+  function buildPost(){
+    readSections();const title=$('title').value.trim();
+    if(!title){toast('記事の名前を入力してね');$('title').focus();return null;}
+    const slug=selected || 'post-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
+    return {id:slug,platform:$('platform').value,title,summary:$('summary').value.trim(),tags:$('tags').value.split(/[,、，]/).map(s=>s.trim()).filter(Boolean),status:$('status').value,sections};
+  }
+  function save(){const p=buildPost();if(!p)return;const index=posts.findIndex(x=>x.id===p.id);if(index<0)posts.push(p);else posts[index]=p;selected=p.id;edited=false;remember();$('draftBadge').textContent='仮保存済み';$('formTitle').textContent='記事を編集';renderList();note('仮保存OK！公開するには「コードをコピー」→GitHubで保存してね。');toast('記事を仮保存したよ！');}
+  function remove(){if(!selected){toast('削除する記事を選んでね');return;} const p=posts.find(x=>x.id===selected);if(!confirm('「'+(p?.title||'この記事')+'」を一覧から削除する？'))return;posts=posts.filter(x=>x.id!==selected);remember();edited=false;if(posts.length)pick(posts[0].id);else startNew();toast('仮保存データから削除したよ');}
+  function code(){return '// ゲーム改造研究所の記事データ。\n// 記事作成ツールから出力しました。\nwindow.GAME_POSTS = '+JSON.stringify(posts,null,2)+';\n';}
+  function validateBeforeExport(){if(edited){toast('先に「記事を仮保存」を押してね');return false;}if(!posts.length){toast('記事がまだないよ');return false;}return true;}
+  function copy(){if(!validateBeforeExport())return;const c=code();navigator.clipboard.writeText(c).then(()=>{toast('GitHub用コードをコピーしたよ！');note('GitHubの posts.js を編集して、全選択→貼り付け→Commit changes で公開できるよ。');}).catch(()=>{toast('コピーできなかったので、ダウンロードを使ってね');});}
+  function download(){if(!validateBeforeExport())return;const blob=new Blob([code()],{type:'text/javascript;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='posts.js';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);toast('posts.js をダウンロードしたよ');}
+  $('newButton').addEventListener('click',startNew);
+  $('saveButton').addEventListener('click',save);
+  $('deleteButton').addEventListener('click',remove);
+  $('addSection').addEventListener('click',()=>{readSections();sections.push({heading:'',body:''});paintSections();markEdited();});
+  $('copyButton').addEventListener('click',copy);
+  $('downloadButton').addEventListener('click',download);
+  $('restoreButton').addEventListener('click',()=>{if(!confirm('このブラウザーの仮保存を破棄して、現在公開中の記事データに戻す？'))return;posts=JSON.parse(JSON.stringify(remote));localStorage.removeItem(storeKey);edited=false;posts.length?pick(posts[0].id):startNew();toast('公開中のデータに戻したよ');});
+  ['platform','status','title','summary','tags'].forEach(id=>$(id).addEventListener('input',markEdited));
+  const stored=localStorage.getItem(storeKey);
+  if(stored){try{const saved=JSON.parse(stored);if(Array.isArray(saved)&&confirm('前回の仮保存データがあります。続きから編集する？（キャンセルで公開中のデータを読み込みます）')) posts=saved;}catch(e){}}
+  if(posts.length)pick(posts[0].id);else startNew();
+})();
+</script>
+</body>
+</html>
