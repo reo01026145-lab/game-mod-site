@@ -16,6 +16,20 @@
     .button{border:1px solid #51668a;background:#233455;color:white;border-radius:10px;padding:11px 14px;font-weight:750}.button.primary{border-color:transparent;background:linear-gradient(120deg,#66eecf,#739bff);color:#061627}.button.ghost{background:transparent}.button.danger{border-color:#a65c6e;color:#ffc5cb;background:transparent}.button:disabled{opacity:.45;cursor:not-allowed}.button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--mint);outline-offset:2px}.toolbar{display:flex;flex-wrap:wrap;gap:9px}.full{width:100%}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:5px;margin-bottom:15px;min-width:0}.field label{font-weight:700;font-size:13px}.field input,.field select,.field textarea{width:100%;background:#0b1427;color:white;border:1px solid #3e5072;border-radius:10px;padding:11px 12px;min-height:43px}.field textarea{resize:vertical;min-height:95px}.field .hint{font-size:12px;color:var(--muted)}.section{border:1px solid #334766;border-radius:12px;background:#101b30;padding:13px;margin-bottom:12px}.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:14px;font-weight:800;margin-bottom:12px}.mini{padding:5px 8px;font-size:12px;border:1px solid #80566d;border-radius:8px;color:#ffbbcc;background:transparent}
     .foot{margin:20px 0 40px}.steps{margin:9px 0 0;padding-left:22px;color:var(--muted)}.steps li{padding-bottom:5px}code{background:#24334d;padding:1px 5px;border-radius:4px;color:#d7f4ff;overflow-wrap:anywhere}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#daf9ee;color:#143329;padding:10px 16px;border-radius:12px;font-size:14px;box-shadow:0 8px 30px #0008;z-index:10;max-width:90vw}.empty{padding:16px;color:var(--muted)}.divider{border-top:1px solid var(--line);margin:17px 0}
     @media(max-width:740px){.layout{grid-template-columns:1fr}.articles{max-height:260px}.panelhead{padding:13px 15px}.pad{padding:15px}.formGrid{grid-template-columns:1fr}.top a{font-size:12px}.hero{padding:18px 0}.hero h1{font-size:28px}}
+    /* スマホのブラウザーがデスクトップ幅を報告しても、タッチ端末では縦レイアウトにする */
+    @media (pointer:coarse){
+      .wrap{width:calc(100% - 24px)}
+      .layout{grid-template-columns:minmax(0,1fr);gap:14px}
+      .articles{display:flex;overflow-x:auto;max-height:none;overscroll-behavior-x:contain;scroll-snap-type:x proximity}
+      .article{flex:0 0 min(72vw,270px);width:min(72vw,270px);min-height:115px;border-bottom:0;border-right:1px solid #263857;scroll-snap-align:start}
+      .article.selected{border-left:0;border-top:4px solid var(--mint);padding:10px 18px 14px}
+      .formGrid{grid-template-columns:minmax(0,1fr)}
+      .hero{padding:18px 0}
+      .hero h1{font-size:clamp(24px,6vw,30px)}
+      .top{flex-wrap:wrap}
+      .field input,.field textarea,.field select{font-size:16px}
+      .toolbar .button{min-height:44px}
+    }
   </style>
 </head>
 <body>
