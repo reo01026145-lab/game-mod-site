@@ -44,7 +44,7 @@
     .kicker { color:#75eede; font-size:11px;font-weight:800;letter-spacing:.17em; margin-bottom:7px; }
     h2 { font-size:clamp(24px,3vw,31px);margin:0;letter-spacing:-.04em; }
     .hint { color:var(--muted);font-size:12px; }
-    .systems { display:grid;grid-template-columns:repeat(4,1fr);gap:13px; }
+    .systems { display:grid;grid-template-columns:minmax(0,320px);gap:13px; }
     .system { background:linear-gradient(140deg,#182643,#121b30);border:1px solid #2b3a58;border-radius:17px;min-height:132px; padding:19px; display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:12px; color:white; transition:.2s transform,.2s border-color; }
     .system:hover,.system:focus-visible { transform:translateY(-3px); border-color:#6ff4de; }
     .system.active { border-color:#66eddc; box-shadow:inset 0 0 0 1px #65e7d5; background:linear-gradient(140deg,#1b414f,#1a2550); }
@@ -89,7 +89,7 @@
     .article .tags { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px; }
     .share { background:#23375e;border:1px solid #3b5f91;color:#ebf5ff;padding:11px 16px;border-radius:10px;font-weight:700;font-size:13px; }
     .toast { position:fixed;left:50%;bottom:24px;transform:translateX(-50%); background:#e8f5ff;color:#12243b;border-radius:10px;padding:12px 18px;font-weight:700;z-index:10;display:none;font-size:13px;box-shadow:var(--shadow);white-space:nowrap; }
-    @media(max-width:790px) { .cards { grid-template-columns:repeat(2,1fr); } .systems {grid-template-columns:repeat(2,1fr);} .hero{padding-top:49px;} }
+    @media(max-width:790px) { .cards { grid-template-columns:repeat(2,1fr); } .systems {grid-template-columns:minmax(0,1fr);} .hero{padding-top:49px;} }
     @media(max-width:540px) { .shell{width:calc(100% - 28px);} .nav{height:64px}.brand{font-size:14px;}.logo{height:34px;width:34px;font-size:18px;}.navlinks{gap:8px;}.navlinks .extra{display:none;}.xbtn{padding:9px 12px;} .hero{padding:37px 0 39px}.top-stats{grid-template-columns:repeat(3,1fr);gap:7px;margin-top:32px;}.stat{padding:12px 10px;}.stat small{font-size:10px;}.stat strong{font-size:20px;}.stat .sub{font-size:9px;}.system{padding:15px;min-height:115px;}.systems{gap:9px;}.browse{padding:15px;}.cards{grid-template-columns:1fr;}.post{min-height:175px;}.about{grid-template-columns:1fr;}.section{padding-bottom:34px;}.article{margin-bottom:40px;} }
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.system{transition:none}}
   </style>
@@ -140,17 +140,14 @@
   </div>
   <div id="toast" class="toast" role="status"></div>
   <script src="config.js"></script>
-  <script src="posts.js"></script>
+  <script src="posts.js?v=ds-only-20261106"></script>
   <script>
   (() => {
     'use strict';
     const posts = Array.isArray(window.GAME_POSTS) ? window.GAME_POSTS : [];
     const systems = [
       {id:'DS', icon:'🎮', label:'Nintendo DS', tip:'DSソフトの検証'},
-      {id:'3DS', icon:'🕹️', label:'Nintendo 3DS', tip:'3DSソフトの検証'},
-      {id:'PSP', icon:'💿', label:'PSP', tip:'携帯ゲームの検証'},
-      {id:'PS2', icon:'📀', label:'PlayStation 2', tip:'据え置きゲームの検証'},
-    ].filter(s=>posts.some(p=>p.platform===s.id));
+    ];
     let activePlatform='all', activeStatus='all';
     const $ = id => document.getElementById(id);
     $('platformCount').textContent=String(systems.length);
