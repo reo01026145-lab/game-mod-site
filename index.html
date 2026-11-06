@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#090e1e" />
-  <meta name="description" content="DS・3DS・PSP・PS2などのゲーム改造・検証を、作品別に整理して公開するサイト。" />
+  <meta name="description" content="DS版イナズマイレブン1のゲーム改造・検証をまとめたサイト。" />
   <title>ゲーム改造研究所 | 検証アーカイブ</title>
   <style>
     :root { color-scheme:dark; --bg:#090e1e; --panel:#10182c; --panel2:#151e35; --line:#293754; --text:#f6f8ff; --muted:#9baac5; --bright:#76f4e7; --blue:#618eff; --warm:#ffce82; --shadow:0 20px 55px #03071177; }
@@ -108,7 +108,7 @@
       <section class="hero">
         <span class="eyebrow"><span class="pulse"></span> GAME MODDING ARCHIVE</span>
         <h1>遊べなかった<span class="gradient">可能性</span>を、<br>探しにいこう。</h1>
-        <p class="lead">DS・3DS・PSP・PS2のゲームを中心に、CPU限定キャラや没データ、隠された要素などを検証。気になるタイトルから記録を探せるゲーム改造アーカイブです。</p>
+        <p class="lead">まずはDS版「イナズマイレブン1」の熱血ポイントや選手データ、通常プレイでは扱えない要素を検証。記録をまとめていくゲーム改造アーカイブです。</p>
         <div class="actions">
           <a class="primary" href="#/games">🎮 ゲーム一覧を見る →</a>
           <a class="secondary" href="https://x.com/kaizoyl5a2o" target="_blank" rel="noopener noreferrer">𝕏 最新情報をチェック</a>
@@ -116,7 +116,7 @@
         <div class="top-stats" aria-label="サイト情報">
           <div class="stat"><small>🟢 現在の同時閲覧</small><strong id="onlineCount" class="online">—</strong><span class="sub" id="onlineStatus" aria-live="polite">接続設定前</span></div>
           <div class="stat"><small>📚 登録記事</small><strong id="postCount">0</strong><span class="sub">公開・準備中を含む</span></div>
-          <div class="stat"><small>🎮 対応機種</small><strong>4<span style="font-size:13px;color:#aabbd5"> 種</span></strong><span class="sub">DS / 3DS / PSP / PS2</span></div>
+          <div class="stat"><small>🎮 対応機種</small><strong><span id="platformCount">1</span><span style="font-size:13px;color:#aabbd5"> 種</span></strong><span class="sub" id="platformNames">DS</span></div>
         </div>
       </section>
       <section class="section" id="systemsSection">
@@ -150,9 +150,11 @@
       {id:'3DS', icon:'🕹️', label:'Nintendo 3DS', tip:'3DSソフトの検証'},
       {id:'PSP', icon:'💿', label:'PSP', tip:'携帯ゲームの検証'},
       {id:'PS2', icon:'📀', label:'PlayStation 2', tip:'据え置きゲームの検証'},
-    ];
+    ].filter(s=>posts.some(p=>p.platform===s.id));
     let activePlatform='all', activeStatus='all';
     const $ = id => document.getElementById(id);
+    $('platformCount').textContent=String(systems.length);
+    $('platformNames').textContent=systems.map(s=>s.id).join(' / ');
     const esc = x => String(x ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     function showToast(message) { const el=$('toast');el.textContent=message;el.style.display='block'; clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>el.style.display='none',2300); }
     function drawSystems(){
