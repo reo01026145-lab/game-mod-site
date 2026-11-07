@@ -99,6 +99,12 @@
     .analytics-card strong{display:block;font-size:30px;line-height:1.3;margin:8px 0 3px;color:var(--bright);font-variant-numeric:tabular-nums}
     .analytics-note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.8}
     @media(max-width:790px){.analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-card{padding:15px}}
+    .article .sources{margin-top:34px;padding:20px 22px;border:1px solid #304363;border-radius:14px;background:#13213a}
+    .article .sources h2{margin:0 0 12px;font-size:18px}
+    .article .sources ul{margin:0;padding-left:20px;line-height:1.95}
+    .article .sources li{margin:8px 0;font-size:13px}
+    .article .sources a{color:#82e8d8;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+    .article .update-date{font-size:12px;color:#8fa9c7;margin-bottom:15px}
   </style>
 </head>
 <body>
@@ -158,7 +164,7 @@
   </div>
   <div id="toast" class="toast" role="status"></div>
   <script src="config.js"></script>
-  <script src="posts.js?v=inazuma-001-20261107"></script>
+  <script src="posts.js?v=inazuma-research-20261107-v2"></script>
   <script src="analytics.js?v=1"></script>
   <script>
   (() => {
@@ -185,13 +191,20 @@
       $('postCards').innerHTML=found.length?found.map(p=>`<a href="#/post/${encodeURIComponent(p.id)}" class="post" aria-label="${esc(p.title)} の記事を開く"><div class="top"><span class="tag">${esc(p.platform)}</span><span class="tag ${p.status==='公開中'?'done':''}">${esc(p.status)}</span></div><h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p><div class="foot"><span>${esc((p.tags||[]).slice(0,2).join(' · '))}</span><b>詳しく見る ↗</b></div></a>`).join(''):'<div class="empty">該当するゲームはまだないよ。<br>別のキーワードも試してみてね！</div>';
       $('statusFilters').querySelectorAll('button').forEach(b=>{b.classList.toggle('active',b.dataset.status===activeStatus);b.setAttribute('aria-pressed',String(b.dataset.status===activeStatus));});
     }
+    function renderSourceLinks(post){
+      const refs=Array.isArray(post.sources)?post.sources.filter(r=>r && typeof r.url==='string' && /^https:\/\/[^\s<>"']+$/.test(r.url)) : [];
+      if(!refs.length)return '';
+      return '<section class="sources"><h2>🔗 参考資料・出典</h2><ul>'+
+        refs.map(r=>'<li><a href="'+esc(r.url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.label||r.url)+'</a></li>').join('')+
+        '</ul><p>公式資料・プレイヤー研究・コード集を区別して参照してください。外部資料の改造コードはこのサイトで動作検証していません。</p></section>';
+    }
     function route(){
       const hash=decodeURIComponent(location.hash||'#/');
       const match=hash.match(/^#\/post\/(.+)$/);
       const post=match?posts.find(p=>p.id===match[1]):null;
       if(post){
         $('homeView').style.display='none';$('articleView').style.display='block';
-        $('articleBody').innerHTML=`<div class="tags"><span class="tag">${esc(post.platform)}</span><span class="tag ${post.status==='公開中'?'done':''}">${esc(post.status)}</span></div><h1>${esc(post.title)}</h1><p class="article-lead">${esc(post.summary)}</p>${post.status==='準備中'?'<div class="notice">🚧 この記事は準備中です。検証が完了してから内容を追加します。</div>':''}${(post.sections||[]).map(s=>`<section><h2>${esc(s.heading)}</h2><p>${esc(s.body)}</p></section>`).join('')}<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:30px"><button class="share" id="shareButton">🔗 この記事のURLをコピー</button>${/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/[0-9]+$/.test(post.xPostUrl||'') ? `<a href="${esc(post.xPostUrl)}" target="_blank" rel="noopener noreferrer" class="share">🖼️ Xで画像・動画を見る ↗</a>` : ''}<a href="https://x.com/kaizoyl5a2o" target="_blank" rel="noopener noreferrer" class="share">𝕏 更新情報</a></div>`;
+        $('articleBody').innerHTML=`<div class="tags"><span class="tag">${esc(post.platform)}</span><span class="tag ${post.status==='公開中'?'done':''}">${esc(post.status)}</span></div><h1>${esc(post.title)}</h1><p class="article-lead">${esc(post.summary)}</p>${post.updatedAt ? `<p class="update-date">資料追記：${esc(post.updatedAt)} ／ 記録と調査情報を区別して記載</p>` : ''}${post.status==='準備中'?'<div class="notice">🚧 この記事は準備中です。検証が完了してから内容を追加します。</div>':''}${(post.sections||[]).map(s=>`<section><h2>${esc(s.heading)}</h2><p>${esc(s.body)}</p></section>`).join('')}${renderSourceLinks(post)}<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:30px"><button class="share" id="shareButton">🔗 この記事のURLをコピー</button>${/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/[0-9]+$/.test(post.xPostUrl||'') ? `<a href="${esc(post.xPostUrl)}" target="_blank" rel="noopener noreferrer" class="share">🖼️ Xで画像・動画を見る ↗</a>` : ''}<a href="https://x.com/kaizoyl5a2o" target="_blank" rel="noopener noreferrer" class="share">𝕏 更新情報</a></div>`;
         $('shareButton').addEventListener('click',()=>copyUrl()); document.title=`${post.title} | ゲーム改造研究所`;window.scrollTo(0,0);
       } else {
         $('articleView').style.display='none';$('homeView').style.display='block'; document.title='ゲーム改造研究所 | 検証アーカイブ';
