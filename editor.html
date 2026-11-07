@@ -52,6 +52,7 @@
         <div class="field"><label for="title">ゲーム・記事の名前 *</label><input id="title" maxlength="140" placeholder="例：イナズマイレブン1　検証記録"></div>
         <div class="field"><label for="summary">一覧に表示する短い説明</label><textarea id="summary" rows="3" maxlength="800" placeholder="どんな検証かを短く説明しよう"></textarea></div>
         <div class="field"><label for="tags">検索用のタグ（カンマ区切り）</label><input id="tags" placeholder="イナイレ, チート, DS"><div class="hint">タグを付けるとサイトの検索で見つかりやすくなるよ。</div></div>
+        <div class="field"><label for="xPostUrl">画像・動画の元X投稿URL（任意）</label><input id="xPostUrl" type="url" placeholder="https://x.com/ユーザー名/status/..." ><div class="hint">記事内に「Xで画像・動画を見る」ボタンが表示されます。</div></div>
         <div class="divider"></div>
         <div class="sectionHead">📝 記事の本文</div><div id="sections"></div><div class="toolbar"><button class="button ghost" id="addSection">＋ 見出しを増やす</button></div>
         <div class="divider"></div>
@@ -67,7 +68,7 @@
   <section class="panel foot"><div class="panelhead"><h2>🌍 世界中の人に公開する手順</h2></div><div class="pad"><ol class="steps"><li>記事を入力して「記事を仮保存」を押す。</li><li>「コードをコピー」を押す。</li><li>下のリンクでGitHubの <code>posts.js</code> を編集する。</li><li>GitHubのコードを全部選択して消し、コピーしたコードを貼り付ける。</li><li><b>Commit changes</b>（変更を保存）を押す。サイトに反映されるよ。</li></ol><p><a href="https://github.com/reo01026145-lab/game-mod-site/edit/main/posts.js" target="_blank" rel="noopener noreferrer">GitHubで posts.js を編集する ↗</a></p><p class="muted">この編集ツールを開くだけでは、GitHubのファイルは変わらないよ。GitHubの更新権限を持つ人だけが公開できる仕組み。</p></div></section>
 </div>
 <div class="toast hidden" id="toast" role="status"></div>
-<script src="./posts.js"></script>
+<script src="./posts.js?v=inazuma-001-20261107"></script>
 <script>
 (() => {
   'use strict';
@@ -116,13 +117,13 @@
     if(edited && !confirm('入力中の変更はまだ仮保存されていないよ。別の記事を開く？')) return;
     const p=posts.find(x=>x.id===id);if(!p)return;
     selected=id;edited=false;$('formTitle').textContent='記事を編集';$('draftBadge').textContent='編集中';
-    $('platform').value=p.platform; $('status').value=p.status; $('title').value=p.title||''; $('summary').value=p.summary||''; $('tags').value=(p.tags||[]).join(', ');
+    $('platform').value=p.platform; $('status').value=p.status; $('title').value=p.title||''; $('summary').value=p.summary||''; $('tags').value=(p.tags||[]).join(', '); $('xPostUrl').value=p.xPostUrl||'';
     sections=JSON.parse(JSON.stringify(p.sections||[]));paintSections();renderList();note('');
   }
   function startNew(){
     if(edited && !confirm('入力中の変更はまだ仮保存されていないよ。新規作成する？'))return;
     selected=null;edited=false;$('formTitle').textContent='新しい記事';$('draftBadge').textContent='新規';
-    $('platform').value='DS';$('status').value='準備中';$('title').value='';$('summary').value='';$('tags').value='';
+    $('platform').value='DS';$('status').value='準備中';$('title').value='';$('summary').value='';$('tags').value='';$('xPostUrl').value='';
     sections=[{heading:'検証内容',body:''}];paintSections();renderList();note('');
     $('title').focus();
   }
@@ -131,7 +132,9 @@
     readSections();const title=$('title').value.trim();
     if(!title){toast('記事の名前を入力してね');$('title').focus();return null;}
     const slug=selected || 'post-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
-    return {id:slug,platform:$('platform').value,title,summary:$('summary').value.trim(),tags:$('tags').value.split(/[,、，]/).map(s=>s.trim()).filter(Boolean),status:$('status').value,sections};
+    const link=$('xPostUrl').value.trim();
+    if(link && !/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/[0-9]+$/.test(link)){toast('X投稿URLを確認してね');$('xPostUrl').focus();return null;}
+    return {id:slug,platform:$('platform').value,title,summary:$('summary').value.trim(),tags:$('tags').value.split(/[,、，]/).map(s=>s.trim()).filter(Boolean),status:$('status').value,sections,...(link?{xPostUrl:link}:{})};
   }
   function save(){const p=buildPost();if(!p)return;const index=posts.findIndex(x=>x.id===p.id);if(index<0)posts.push(p);else posts[index]=p;selected=p.id;edited=false;remember();$('draftBadge').textContent='仮保存済み';$('formTitle').textContent='記事を編集';renderList();note('仮保存OK！公開するには「コードをコピー」→GitHubで保存してね。');toast('記事を仮保存したよ！');}
   function remove(){if(!selected){toast('削除する記事を選んでね');return;} const p=posts.find(x=>x.id===selected);if(!confirm('「'+(p?.title||'この記事')+'」を一覧から削除する？'))return;posts=posts.filter(x=>x.id!==selected);remember();edited=false;if(posts.length)pick(posts[0].id);else startNew();toast('仮保存データから削除したよ');}
@@ -146,7 +149,7 @@
   $('copyButton').addEventListener('click',copy);
   $('downloadButton').addEventListener('click',download);
   $('restoreButton').addEventListener('click',()=>{if(!confirm('このブラウザーの仮保存を破棄して、現在公開中の記事データに戻す？'))return;posts=JSON.parse(JSON.stringify(remote));localStorage.removeItem(storeKey);edited=false;posts.length?pick(posts[0].id):startNew();toast('公開中のデータに戻したよ');});
-  ['platform','status','title','summary','tags'].forEach(id=>$(id).addEventListener('input',markEdited));
+  ['platform','status','title','summary','tags','xPostUrl'].forEach(id=>$(id).addEventListener('input',markEdited));
   const stored=localStorage.getItem(storeKey);
   if(stored){try{const saved=JSON.parse(stored);if(Array.isArray(saved)&&confirm('前回の仮保存データがあります。続きから編集する？（キャンセルで公開中のデータを読み込みます）')) posts=saved;}catch(e){}}
   if(posts.length)pick(posts[0].id);else startNew();
