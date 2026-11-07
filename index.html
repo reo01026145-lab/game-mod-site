@@ -158,7 +158,7 @@
   </div>
   <div id="toast" class="toast" role="status"></div>
   <script src="config.js"></script>
-  <script src="posts.js?v=ds-only-20261106"></script>
+  <script src="posts.js?v=inazuma-001-20261107"></script>
   <script src="analytics.js?v=1"></script>
   <script>
   (() => {
@@ -191,7 +191,7 @@
       const post=match?posts.find(p=>p.id===match[1]):null;
       if(post){
         $('homeView').style.display='none';$('articleView').style.display='block';
-        $('articleBody').innerHTML=`<div class="tags"><span class="tag">${esc(post.platform)}</span><span class="tag ${post.status==='公開中'?'done':''}">${esc(post.status)}</span></div><h1>${esc(post.title)}</h1><p class="article-lead">${esc(post.summary)}</p>${post.status==='準備中'?'<div class="notice">🚧 この記事は準備中です。検証が完了してから内容を追加します。</div>':''}${(post.sections||[]).map(s=>`<section><h2>${esc(s.heading)}</h2><p>${esc(s.body)}</p></section>`).join('')}<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:30px"><button class="share" id="shareButton">🔗 この記事のURLをコピー</button><a href="https://x.com/kaizoyl5a2o" target="_blank" rel="noopener noreferrer" class="share">𝕏 更新情報</a></div>`;
+        $('articleBody').innerHTML=`<div class="tags"><span class="tag">${esc(post.platform)}</span><span class="tag ${post.status==='公開中'?'done':''}">${esc(post.status)}</span></div><h1>${esc(post.title)}</h1><p class="article-lead">${esc(post.summary)}</p>${post.status==='準備中'?'<div class="notice">🚧 この記事は準備中です。検証が完了してから内容を追加します。</div>':''}${(post.sections||[]).map(s=>`<section><h2>${esc(s.heading)}</h2><p>${esc(s.body)}</p></section>`).join('')}<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:30px"><button class="share" id="shareButton">🔗 この記事のURLをコピー</button>${/^https:\/\/x\.com\/[A-Za-z0-9_]+\/status\/[0-9]+$/.test(post.xPostUrl||'') ? `<a href="${esc(post.xPostUrl)}" target="_blank" rel="noopener noreferrer" class="share">🖼️ Xで画像・動画を見る ↗</a>` : ''}<a href="https://x.com/kaizoyl5a2o" target="_blank" rel="noopener noreferrer" class="share">𝕏 更新情報</a></div>`;
         $('shareButton').addEventListener('click',()=>copyUrl()); document.title=`${post.title} | ゲーム改造研究所`;window.scrollTo(0,0);
       } else {
         $('articleView').style.display='none';$('homeView').style.display='block'; document.title='ゲーム改造研究所 | 検証アーカイブ';
